@@ -1,5 +1,5 @@
 /*
-Reception de données provenant d'une raspberry pi par i2c
+Reception de données(valeur entre -100 et 100) ent provenant d'une raspberry pi par i2c
 */
 
 #include<Wire.h>
@@ -34,6 +34,10 @@ void receiveEvent(int bytes) {
   while (Wire.available()) {
     int value = Wire.read();  // Lit la valeur
     if (index < 4) {  // Vérifie que l'index est dans les limites du tableau
+      if (value > 127){
+        value = -256 + value;
+        
+      }
       data[index] = value;
       index++;
     }
@@ -42,20 +46,3 @@ void receiveEvent(int bytes) {
     }
   }
 }
-
-
-// Fonction appelée lors de la réception de données
-/*void receiveEvent(int bytes) {
-  if(Wire.available()) {
-    int value = Wire.read();  // Lit la valeur
-    if (index < 4) {  // Vérifie que l'index est dans les limites du tableau
-      data[index] = value;
-      index++;
-    }
-    if (index >= 4) {
-      index = 0;  // Réinitialise l'index pour la prochaine série de valeurs
-    }
-  }
-}*/
-
-
